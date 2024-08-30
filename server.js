@@ -20,10 +20,10 @@ app.use(cors({
 app.use(express.json());
 
 // Serve static files from the React app
-app.use(express.static(path.join(__dirname, '../frontend/build')));
+app.use(express.static(path.join(__dirname, 'build')));
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
 // Define the system message
@@ -32,7 +32,7 @@ const systemMessage = {
     content: "You are a helpful assistant, called LISA. Always provide accurate and concise answers, but human.",
 };
 
-// Create a new chat
+// API Routes
 app.post('/api/createChat', async (req, res) => {
     try {
         const { name } = req.body;
@@ -45,7 +45,6 @@ app.post('/api/createChat', async (req, res) => {
     }
 });
 
-// Get all chats
 app.get('/api/getChats', async (req, res) => {
     try {
         const chats = await Chat.find();
@@ -56,7 +55,6 @@ app.get('/api/getChats', async (req, res) => {
     }
 });
 
-// Get messages for a specific chat
 app.get('/api/getConversation/:chatId', async (req, res) => {
     try {
         const { chatId } = req.params;
@@ -68,7 +66,6 @@ app.get('/api/getConversation/:chatId', async (req, res) => {
     }
 });
 
-// Continue conversation
 app.post('/api/continueConversation', async (req, res) => {
     try {
         const { history, chatId } = req.body;
