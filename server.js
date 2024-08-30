@@ -1,5 +1,5 @@
-// server.js
 const express = require('express');
+const path = require('path');
 const cors = require('cors');
 const { ollama } = require('ollama-ai-provider');
 const { streamText } = require('ai');
@@ -10,6 +10,7 @@ const Chat = require('./models/Chat');
 const app = express();
 connectDB();
 
+// CORS Configuration
 app.use(cors({
   origin: 'https://lorinsinzig.ch',
   methods: 'GET,POST,DELETE',
@@ -17,6 +18,13 @@ app.use(cors({
 }));
 
 app.use(express.json());
+
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, '../frontend/build')));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
+});
 
 // Define the system message
 const systemMessage = {
@@ -134,5 +142,5 @@ app.delete('/api/deleteChat/:chatId', async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 5003;  // Changed port to 5003
+const PORT = process.env.PORT || 5003;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
