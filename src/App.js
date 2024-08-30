@@ -15,7 +15,7 @@ function App() {
   useEffect(() => {
     const fetchChats = async () => {
       try {
-        const response = await fetch('http://localhost:5001/api/getChats');
+        const response = await fetch('https://lorinsinzig.ch/api/getChats');  // Change port to 5003
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -28,16 +28,16 @@ function App() {
         console.error("Error fetching chats:", error);
       }
     };
-
+  
     fetchChats();
   }, []);
-
+  
   // Fetch conversation messages when a chat is selected
   useEffect(() => {
     if (selectedChatId) {
       const fetchConversation = async () => {
         try {
-          const response = await fetch(`http://localhost:5001/api/getConversation/${selectedChatId}`);
+          const response = await fetch(`https://lorinsinzig.ch/api/getConversation/${selectedChatId}`);  // Change port to 5003
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
           }
@@ -47,7 +47,7 @@ function App() {
           console.error("Error fetching conversation:", error);
         }
       };
-
+  
       fetchConversation();
     }
   }, [selectedChatId]);
@@ -62,18 +62,18 @@ function App() {
 
   const sendMessage = async () => {
     if (!selectedChatId || isStreaming) return;
-
+  
     const newMessage = { role: "user", content: input, chatId: selectedChatId };
     setConversation(prev => [...prev, newMessage]);
     setInput("");
     setIsStreaming(true);
-
+  
     // Create an AbortController to allow stopping the fetch request
     const controller = new AbortController();
     controllerRef.current = controller;
-
+  
     try {
-      const response = await fetch('http://localhost:5001/api/continueConversation', {
+      const response = await fetch('https://lorinsinzig.ch/api/continueConversation', {  // Change port to 5003
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -81,31 +81,31 @@ function App() {
         body: JSON.stringify({ history: [...conversation, newMessage], chatId: selectedChatId }),
         signal: controller.signal,
       });
-
+  
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-
+  
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
       let textContent = "";
       let assistantMessage = { role: "assistant", content: "", chatId: selectedChatId };
-
+  
       setConversation(prev => [...prev, assistantMessage]);
-
+  
       while (true) {
         const { done, value } = await reader.read();
         if (done || controller.signal.aborted) break;
-
+  
         const chunk = decoder.decode(value);
         textContent += chunk;
-
+  
         setConversation(prev => [
           ...prev.slice(0, -1),
           { role: "assistant", content: textContent, chatId: selectedChatId },
         ]);
       }
-
+  
       setIsStreaming(false);
     } catch (error) {
       if (error.name === 'AbortError') {
@@ -132,7 +132,7 @@ function App() {
     const name = prompt("Enter chat name:");
     if (name) {
       try {
-        const response = await fetch('http://localhost:5001/api/createChat', {
+        const response = await fetch('https://lorinsinzig.ch/api/createChat', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -156,7 +156,7 @@ function App() {
   const deleteChat = async (chatId) => {
     console.log(`Attempting to delete chat with ID: ${chatId}`);
     try {
-      const response = await fetch(`http://localhost:5001/api/deleteChat/${chatId}`, {
+      const response = await fetch(`https://lorinsinzig.ch/api/deleteChat/${chatId}`, {
         method: 'DELETE',
       });
 

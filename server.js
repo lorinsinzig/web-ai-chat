@@ -1,3 +1,4 @@
+// server.js
 const express = require('express');
 const cors = require('cors');
 const { ollama } = require('ollama-ai-provider');
@@ -10,7 +11,7 @@ const app = express();
 connectDB();
 
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: 'https://lorinsinzig.ch',
   methods: 'GET,POST,DELETE',
   allowedHeaders: 'Content-Type',
 }));
@@ -133,5 +134,5 @@ app.delete('/api/deleteChat/:chatId', async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 5003;  // Changed port to 5003
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
