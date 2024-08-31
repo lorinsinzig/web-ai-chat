@@ -15,7 +15,7 @@ function App() {
   useEffect(() => {
     const fetchChats = async () => {
       try {
-        const response = await fetch('http://92.113.31.116:5003/api/getChats');  // Use the public IP and port 5003
+        const response = await fetch('https://api.lorinsinzig.ch/api/getChats');  // Use the public IP and port 5003
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -31,13 +31,13 @@ function App() {
   
     fetchChats();
   }, []);
-  
+
   // Fetch conversation messages when a chat is selected
   useEffect(() => {
     if (selectedChatId) {
       const fetchConversation = async () => {
         try {
-          const response = await fetch(`http://92.113.31.116:5003/api/getConversation/${selectedChatId}`);  // Use the public IP and port 5003
+          const response = await fetch(`https://api.lorinsinzig.ch/api/getConversation/${selectedChatId}`);  // Use the public IP and port 5003
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
           }
@@ -73,7 +73,7 @@ function App() {
     controllerRef.current = controller;
   
     try {
-      const response = await fetch('http://92.113.31.116:5003/api/continueConversation', {  // Use the public IP and port 5003
+      const response = await fetch('https://api.lorinsinzig.ch/api/continueConversation', {  // Use the public IP and port 5003
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -132,7 +132,7 @@ function App() {
     const name = prompt("Enter chat name:");
     if (name) {
       try {
-        const response = await fetch('http://92.113.31.116:5003/api/createChat', {  // Use the public IP and port 5003
+        const response = await fetch('https://api.lorinsinzig.ch/api/createChat', {  // Use the public IP and port 5003
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -156,7 +156,7 @@ function App() {
   const deleteChat = async (chatId) => {
     console.log(`Attempting to delete chat with ID: ${chatId}`);
     try {
-      const response = await fetch(`http://92.113.31.116:5003/api/deleteChat/${chatId}`, {  // Use the public IP and port 5003
+      const response = await fetch(`https://api.lorinsinzig.ch/api/deleteChat/${chatId}`, {  // Use the public IP and port 5003
         method: 'DELETE',
       });
 

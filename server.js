@@ -13,7 +13,7 @@ connectDB();
 const cors = require('cors');
 
 app.use(cors({
-  origin: 'http://92.113.31.116:3000',  // Update this to match your frontend origin
+  origin: 'https://chat.lorinsinzig.ch',  // Update this to match your frontend origin
   methods: 'GET,POST,DELETE',
   allowedHeaders: 'Content-Type',
 }));
