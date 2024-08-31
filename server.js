@@ -12,7 +12,7 @@ connectDB();
 
 // CORS Configuration
 app.use(cors({
-  origin: 'http://92.113.31.116:5003',  // Updated to use your server's IP address
+  origin: 'http://92.113.31.116:5003',
   methods: 'GET,POST,DELETE',
   allowedHeaders: 'Content-Type',
 }));
