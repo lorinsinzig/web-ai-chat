@@ -15,7 +15,7 @@ function App() {
   useEffect(() => {
     const fetchChats = async () => {
       try {
-        const response = await fetch('https://lorinsinzig.ch/api/getChats');  // Change port to 5003
+        const response = await fetch('http://92.113.31.116:5003/api/getChats');  // Use the public IP and port 5003
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -37,7 +37,7 @@ function App() {
     if (selectedChatId) {
       const fetchConversation = async () => {
         try {
-          const response = await fetch(`https://lorinsinzig.ch/api/getConversation/${selectedChatId}`);  // Change port to 5003
+          const response = await fetch(`http://92.113.31.116:5003/api/getConversation/${selectedChatId}`);  // Use the public IP and port 5003
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
           }
@@ -73,7 +73,7 @@ function App() {
     controllerRef.current = controller;
   
     try {
-      const response = await fetch('https://lorinsinzig.ch/api/continueConversation', {  // Change port to 5003
+      const response = await fetch('http://92.113.31.116:5003/api/continueConversation', {  // Use the public IP and port 5003
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -132,7 +132,7 @@ function App() {
     const name = prompt("Enter chat name:");
     if (name) {
       try {
-        const response = await fetch('https://lorinsinzig.ch/api/createChat', {
+        const response = await fetch('http://92.113.31.116:5003/api/createChat', {  // Use the public IP and port 5003
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -156,7 +156,7 @@ function App() {
   const deleteChat = async (chatId) => {
     console.log(`Attempting to delete chat with ID: ${chatId}`);
     try {
-      const response = await fetch(`https://lorinsinzig.ch/api/deleteChat/${chatId}`, {
+      const response = await fetch(`http://92.113.31.116:5003/api/deleteChat/${chatId}`, {  // Use the public IP and port 5003
         method: 'DELETE',
       });
 
@@ -252,24 +252,32 @@ function App() {
         </div>
 
         <div className="bg-white p-4 flex items-center justify-center space-x-2">
-          <div className="relative w-full max-w-4xl"> {/* Limit the max width of the input container */}
-            <input
-              type="text"
+          <div className="relative w-full max-w-4xl"> {/* Limit the max width of the input box */}
+            <textarea
+              rows="2"
               value={input}
-              onChange={(event) => setInput(event.target.value)}
+              onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              className="bg-gray-100 pl-3 pr-16 block w-full rounded-md py-3 text-gray-900 shadow-sm placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-500 outline-none"
+              className="w-full h-20 resize-none p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600"
               placeholder="Type your message..."
+              disabled={isStreaming} // Disable input while streaming
             />
-            <button
-              onClick={isStreaming ? stopStreaming : sendMessage}
-              disabled={!input.trim() && !isStreaming}
-              className={`absolute top-1/2 transform -translate-y-1/2 right-1 px-4 py-2 rounded ${!input.trim() && !isStreaming ? 'bg-gray-400 text-white cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-500 text-white'} ${isStreaming ? 'bg-indigo-700 hover:bg-indigo-600' : ''} focus:outline-none focus:ring-0 w-20`} // Fixed width using Tailwind class
-              style={{ height: '80%' }}
-            >
-              {isStreaming ? 'Stop' : 'Send'}
-            </button>
+            {isStreaming && (
+              <button
+                onClick={stopStreaming}
+                className="absolute right-3 top-3 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+              >
+                Stop
+              </button>
+            )}
           </div>
+          <button
+            onClick={sendMessage}
+            disabled={isStreaming} // Disable send button while streaming
+            className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus:outline-none focus:ring-0"
+          >
+            Send
+          </button>
         </div>
       </div>
     </div>
