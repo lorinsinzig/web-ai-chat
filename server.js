@@ -1,6 +1,5 @@
 const express = require('express');
 const path = require('path');
-const cors = require('cors');
 const { ollama } = require('ollama-ai-provider');
 const { streamText } = require('ai');
 const connectDB = require('./db');
@@ -11,11 +10,14 @@ const app = express();
 connectDB();
 
 // CORS Configuration
+const cors = require('cors');
+
 app.use(cors({
-  origin: 'http://92.113.31.116:5003',
+  origin: 'http://92.113.31.116:3000',  // Update this to match your frontend origin
   methods: 'GET,POST,DELETE',
   allowedHeaders: 'Content-Type',
 }));
+
 
 app.use(express.json());
 
